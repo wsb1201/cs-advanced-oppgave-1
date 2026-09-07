@@ -9,6 +9,9 @@ public class Book(string Title, string Author)
 
 	public void Borrow()
 	{
+		if (IsBorrowed)
+			throw new InvalidOperationException("Book is already borrowed.");
+
 		IsBorrowed = true;
 	}
 }
