@@ -35,4 +35,19 @@ public class LibraryServiceTests
 		// Then
 		Assert.True(book.IsBorrowed);
 	}
+
+	[Fact]
+	public void Test_BorrowedBook_Unavailable()
+	{
+		// Given
+		var library = new LibraryService();
+		var bookId = library.RegisterBook("Foundation", "Isaac Asimov");
+		var book = library.Lookup(bookId);
+
+		// When
+		book.Borrow();
+
+		// Then
+		Assert.Throws<InvalidOperationException>(book.Borrow);
+	}
 }
