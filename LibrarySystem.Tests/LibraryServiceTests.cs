@@ -20,4 +20,19 @@ public class LibraryServiceTests
 		Assert.Equal(bookId, book.Id);
 		Assert.False(book.IsBorrowed);
 	}
+
+	[Fact]
+	public void Test_BorrowBook()
+	{
+		// Given
+		var library = new LibraryService();
+		var bookId = library.RegisterBook("Foundation", "Isaac Asimov");
+		var book = library.Lookup(bookId);
+
+		// When
+		book.Borrow();
+
+		// Then
+		Assert.True(book.IsBorrowed);
+	}
 }
