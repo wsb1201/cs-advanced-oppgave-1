@@ -9,6 +9,6 @@ public class Book(string Title, string Author)
 
 	public void Borrow()
 	{
-		throw new NotImplementedException();
+		IsBorrowed = true;
 	}
 }
