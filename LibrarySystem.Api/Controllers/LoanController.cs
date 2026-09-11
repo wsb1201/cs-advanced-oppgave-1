@@ -17,7 +17,15 @@ public class LoanController(LibraryService service) : ControllerBase
 	[ProducesResponseType(StatusCodes.Status409Conflict)]
 	public async Task<ActionResult<Guid>> RegisterLoan([FromBody] RegisterLoanDto request)
 	{
-		throw new NotImplementedException();
+		try
+		{
+			var loanId = service.RegisterLoan(request.BookId, request.Patron, request.ExpiryDate);
+			return (loanId is null) ? NotFound() : Created(null as string, loanId);
+		}
+		catch (Book.AlreadyBorrowedException)
+		{
+			return Conflict();
+		}
 	}
 
 	[HttpDelete("{id:guid}")]
@@ -25,6 +33,9 @@ public class LoanController(LibraryService service) : ControllerBase
 	[ProducesResponseType(StatusCodes.Status404NotFound)]
 	public async Task<ActionResult<DeleteLoanDto>> DeleteLoan(Guid id)
 	{
-		throw new NotImplementedException();
+		var loan = service.DeleteLoan(id);
+		return (loan is null)
+			? NotFound()
+			: Ok(new DeleteLoanDto(loan.Patron, loan.ExpiryDate < DateTime.Now));
 	}
 }
