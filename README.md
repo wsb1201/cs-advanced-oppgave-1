@@ -1,5 +1,19 @@
 # Biblioteksystem 📚
 
+## Running the project
+
+From the project directory, run:
+
+```bash
+dotnet run --project LibrarySystem.Api
+```
+
+or to run the unit tests, run:
+
+```bash
+dotnet test
+```
+
 ## REST API
 
 ```
