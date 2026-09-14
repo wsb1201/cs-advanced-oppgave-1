@@ -10,3 +10,7 @@ charset = utf-8
 
 [*.cs]
 charset = utf-8-bom
+
+[*.yaml]
+indent_style = space
+indent_size = 2
