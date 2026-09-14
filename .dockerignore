@@ -1,0 +1,11 @@
+**/bin/
+**/obj/
+.git/
+.vscode/
+appsettings.Development.json
+Properties/launchSettings.json
+Dockerfile
+docker-compose.yaml
+.dockerignore
+.gitignore
+.editorconfig
