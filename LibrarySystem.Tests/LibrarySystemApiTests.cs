@@ -2,14 +2,26 @@
 
 using System.Net;
 using System.Net.Http.Json;
+using Domain.Repositories;
 using LibrarySystem.Api.Controllers;
+using LibrarySystem.Domain;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 public sealed class LibraryServiceApiTests(WebApplicationFactory<Program> factory)
 	: IClassFixture<WebApplicationFactory<Program>>
 {
-	private readonly HttpClient _client = factory.CreateClient();
+	private readonly HttpClient _client = factory
+		.WithWebHostBuilder(builder =>
+		{
+			builder.ConfigureTestServices(services =>
+			{
+				services.AddSingleton(new LibraryService(new MemLibraryRepository()));
+			});
+		})
+		.CreateClient();
 
 	[Fact]
 	public async Task RegisterBook_WithValidData_ReturnsCreated()
