@@ -1,9 +1,12 @@
 ﻿namespace LibrarySystem.Domain;
 
-public class Loan(Guid BookId, string Patron, DateTimeOffset ExpiryDate)
+public class Loan(Guid bookId, string patron, DateTimeOffset ExpiryDate)
 {
-	public Guid Id { get; } = Guid.NewGuid();
-	public Guid BookId { get; } = BookId;
-	public string Patron { get; } = Patron;
-	public DateTimeOffset ExpiryDate { get; } = ExpiryDate;
+	public Guid Id { get; private init; } = Guid.NewGuid();
+	public Guid BookId { get; private init; } = bookId;
+	public string Patron { get; private init; } = patron;
+	public DateTimeOffset ExpiryDate { get; private init; } = ExpiryDate;
+
+	public Loan()
+		: this(Guid.Empty, string.Empty, DateTimeOffset.UnixEpoch) { }
 }

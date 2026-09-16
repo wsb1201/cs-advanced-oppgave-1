@@ -1,40 +1,15 @@
 ﻿namespace LibrarySystem.Domain;
 
-public class LibraryService
+using Repositories;
+
+public class LibraryService(ILibraryRepository repo)
 {
-	private readonly Dictionary<Guid, Book> _bookRegistry = [];
-	private readonly Dictionary<Guid, Loan> _loanRegistry = [];
+	public Task<Guid> RegisterBook(string title, string author) => repo.RegisterBook(title, author);
 
-	public Guid RegisterBook(string title, string author)
-	{
-		var book = new Book(title, author);
-		_bookRegistry.Add(book.Id, book);
-		return book.Id;
-	}
+	public Task<Book?> LookupBook(Guid bookId) => repo.LookupBook(bookId);
 
-	public Book? LookupBook(Guid bookId)
-	{
-		return _bookRegistry.TryGetValue(bookId, out var book) ? book : null;
-	}
+	public Task<Guid?> RegisterLoan(Guid bookId, string patron, DateTimeOffset expiryDate) =>
+		repo.RegisterLoan(bookId, patron, expiryDate);
 
-	public Guid? RegisterLoan(Guid bookId, string patron, DateTimeOffset expiryDate)
-	{
-		var book = LookupBook(bookId);
-		book?.Borrow();
-		if (book is null)
-			return null;
-
-		var loan = new Loan(bookId, patron, expiryDate);
-		_loanRegistry.Add(loan.Id, loan);
-		return loan.Id;
-	}
-
-	public Loan? DeleteLoan(Guid loanId)
-	{
-		var loan = _loanRegistry[loanId];
-		var book = LookupBook(loan.BookId);
-		book?.MakeAvailable();
-
-		return _loanRegistry.Remove(loan.Id) ? loan : null;
-	}
+	public Task<Loan?> DeleteLoan(Guid loanId) => repo.DeleteLoan(loanId);
 }

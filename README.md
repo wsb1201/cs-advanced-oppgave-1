@@ -5,7 +5,7 @@
 From the project directory, run:
 
 ```bash
-dotnet run --project LibrarySystem.Api
+docker compose up
 ```
 
 or to run the unit tests, run:

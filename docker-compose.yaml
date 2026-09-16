@@ -1,17 +1,15 @@
 services:
   api:
     build: {context: ., dockerfile: Dockerfile}
-    container_name: librarysystem-api
-    ports: ["8080:8080"]
+    ports: ["8080:80"]
     restart: on-failure
     depends_on: {db: {condition: service_healthy}}
     environment:
-      ConnectionStrings__DefaultConnection: Host=db;Port=5432;Database=library;Username=postgres;Password=postgres
-      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__Default: Host=db;Port=5432;Database=library;Username=postgres;Password=postgres
+      ASPNETCORE_ENVIRONMENT: Development
 
   db:
     image: postgres:16
-    container_name: postgres
     ports: ['5432:5432']
     restart: unless-stopped
     healthcheck:

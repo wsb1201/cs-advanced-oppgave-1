@@ -19,7 +19,11 @@ public class LoanController(LibraryService service) : ControllerBase
 	{
 		try
 		{
-			var loanId = service.RegisterLoan(request.BookId, request.Patron, request.ExpiryDate);
+			var loanId = await service.RegisterLoan(
+				request.BookId,
+				request.Patron,
+				request.ExpiryDate
+			);
 			return (loanId is null) ? NotFound() : Created(null as string, loanId);
 		}
 		catch (Book.AlreadyBorrowedException)
@@ -33,7 +37,7 @@ public class LoanController(LibraryService service) : ControllerBase
 	[ProducesResponseType(StatusCodes.Status404NotFound)]
 	public async Task<ActionResult<DeleteLoanDto>> DeleteLoan(Guid id)
 	{
-		var loan = service.DeleteLoan(id);
+		var loan = await service.DeleteLoan(id);
 		return (loan is null)
 			? NotFound()
 			: Ok(new DeleteLoanDto(loan.Patron, loan.ExpiryDate < DateTime.Now));

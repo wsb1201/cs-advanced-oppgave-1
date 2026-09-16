@@ -16,7 +16,7 @@ public class BookController(LibraryService service) : ControllerBase
 	[ProducesResponseType(StatusCodes.Status400BadRequest)]
 	public async Task<ActionResult<Guid>> RegisterBook([FromBody] RegisterBookDto request)
 	{
-		var bookId = service.RegisterBook(request.Title, request.Author);
+		var bookId = await service.RegisterBook(request.Title, request.Author);
 		return CreatedAtAction(nameof(LookupBook), new { id = bookId }, bookId);
 	}
 
@@ -25,7 +25,7 @@ public class BookController(LibraryService service) : ControllerBase
 	[ProducesResponseType(StatusCodes.Status404NotFound)]
 	public async Task<ActionResult<LookupBookDto>> LookupBook(Guid id)
 	{
-		var book = service.LookupBook(id);
+		var book = await service.LookupBook(id);
 		return book is null
 			? NotFound()
 			: Ok(new LookupBookDto(book.Title, book.Author, !book.IsBorrowed));

@@ -1,11 +1,14 @@
 ﻿namespace LibrarySystem.Domain;
 
-public class Book(string Title, string Author)
+public class Book(string title, string author)
 {
-	public Guid Id { get; } = Guid.NewGuid();
-	public string Title { get; } = Title;
-	public string Author { get; } = Author;
+	public Guid Id { get; private init; } = Guid.NewGuid();
+	public string Title { get; private init; } = title;
+	public string Author { get; private init; } = author;
 	public bool IsBorrowed { get; private set; }
+
+	public Book()
+		: this(string.Empty, string.Empty) { }
 
 	public void Borrow()
 	{
