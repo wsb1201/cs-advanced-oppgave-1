@@ -1,5 +1,48 @@
 # Biblioteksystem 📚
 
+## User Authentication
+
+### Rules
+
+- Librarian (admin) users create and remove loans.
+- A loan is associated with a user and is visible to them.
+- User A must not be able to see User B's loans.
+
+### Authentication Diagram
+
+```mermaid
+flowchart LR
+	subgraph CLIENT["Client"]
+	   Cache[("Token storage")]
+	end
+	subgraph API
+		IdP(["Identity Provider"])
+		RSrv(["Resource Server"])
+	end
+	User["Resource Owner"]
+
+	Login[[
+		Authenticate user
+		Generate signed token
+	]]
+	Access[[
+		Validate JWT
+		Check ownership
+		Authorize request
+	]]
+
+	CLIENT --"Ask for credentials"--> User
+	User -."Login credentials".-> CLIENT
+	CLIENT --"Login credentials"--> IdP
+	IdP -."Access token".-> Cache
+	CLIENT --"Request w/ token"--> RSrv
+
+	IdP --> Login .-> IdP
+	RSrv --> Access .-> RSrv
+
+	RSrv -."Response".-> CLIENT
+```
+
 ## Running the project
 
 From the project directory, run:

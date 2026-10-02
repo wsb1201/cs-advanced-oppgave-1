@@ -3,6 +3,7 @@
 public class MemLibraryRepository : ILibraryRepository
 {
 	private readonly Dictionary<Guid, Book> _bookRegistry = [];
+	private readonly Dictionary<Guid, User> _userRegistry = [];
 	private readonly Dictionary<Guid, Loan> _loanRegistry = [];
 
 	public Task<Guid> RegisterBook(string title, string author)
@@ -15,7 +16,7 @@ public class MemLibraryRepository : ILibraryRepository
 	public Task<Book?> LookupBook(Guid bookId) =>
 		Task.FromResult(_bookRegistry.TryGetValue(bookId, out var book) ? book : null);
 
-	public async Task<Guid?> RegisterLoan(Guid bookId, string patron, DateTimeOffset expiryDate)
+	public async Task<Guid?> RegisterLoan(Guid bookId, Guid userId, DateTimeOffset expiryDate)
 	{
 		var book = await LookupBook(bookId);
 		if (book is null)
@@ -23,7 +24,7 @@ public class MemLibraryRepository : ILibraryRepository
 
 		book.Borrow();
 
-		var loan = new Loan(bookId, patron, expiryDate);
+		var loan = new Loan(bookId, userId, expiryDate);
 		_loanRegistry.Add(loan.Id, loan);
 		return loan.Id;
 	}
@@ -38,4 +39,13 @@ public class MemLibraryRepository : ILibraryRepository
 
 		return _loanRegistry.Remove(loan.Id) ? loan : null;
 	}
+
+	public Task<IEnumerable<Loan>> GetLoans(User user) => throw new NotImplementedException();
+
+	public Task<bool> AddUser(string name, string hash, bool librarian) =>
+		throw new NotImplementedException();
+
+	public Task<User?> GetUserByName(string name) => throw new NotImplementedException();
+
+	public Task<User?> GetUserById(Guid userId) => throw new NotImplementedException();
 }

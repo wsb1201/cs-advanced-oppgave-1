@@ -5,8 +5,10 @@ services:
     restart: on-failure
     depends_on: {db: {condition: service_healthy}}
     environment:
-      ConnectionStrings__Default: Host=db;Port=5432;Database=library;Username=postgres;Password=postgres
+      ConnectionStrings__Default: Host=db;Port=5432;Database=library;Username=postgres;Password=postgres;GSS Encryption Mode=Disable
       ASPNETCORE_ENVIRONMENT: Development
+      INITIAL_ADMIN_USER: admin
+      INITIAL_ADMIN_PASSWORD: admin
 
   db:
     image: postgres:16
